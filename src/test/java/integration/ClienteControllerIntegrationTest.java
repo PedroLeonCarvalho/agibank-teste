@@ -1,5 +1,6 @@
 package integration;
 import com.agibank.test.teste_tecnico.TesteTecnicoApplication;
+import com.agibank.test.teste_tecnico.domain.Cliente;
 import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 import com.agibank.test.teste_tecnico.service.ClienteService;
@@ -21,8 +22,7 @@ import java.time.LocalDate;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = TesteTecnicoApplication.class)
 @AutoConfigureMockMvc
@@ -59,9 +59,8 @@ public class ClienteControllerIntegrationTest {
     }
     @Transactional
     @Test
-    void deveCriarClienteComSucesso() throws Exception {
+    void createClienteSucess() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(clienteDto);
-
         mockMvc.perform(post("/cliente")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -73,8 +72,22 @@ public class ClienteControllerIntegrationTest {
 
     }
 
+    @Transactional
+    @Test
+    void failToCreateCliente_cpfAlreadyExists() throws Exception {
+        String jsonRequest = objectMapper.writeValueAsString(clienteDto);
 
-}
+        clienteRepository.save(new Cliente(clienteDto));
+        mockMvc.perform(post("/cliente")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(jsonRequest))
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string("Cpf já cadastrado."));    }
+
+    }
+
+
+
 
 
 
