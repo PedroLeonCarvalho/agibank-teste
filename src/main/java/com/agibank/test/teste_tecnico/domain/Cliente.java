@@ -27,7 +27,7 @@ public class Cliente {
     @Size(min = 3, message = "O nome deve ter no mínimo 3 letras")
     private String nome;
 
-    @Column(nullable = false, unique = true, length = 11)
+    @Column(nullable = false, unique = true, length = 14)
     @NotBlank(message = "CPF é obrigatório")
     @Pattern(regexp = "(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)", message = "CPF deve ser no formato XXX.XXX.XXX-XX")
     private String cpf;
