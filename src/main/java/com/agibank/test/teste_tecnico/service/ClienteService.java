@@ -88,8 +88,6 @@ public class ClienteService {
                 cliente.getEndereco(),
                 cliente.getSaldo()
         );
-
-
     }
 
     public ClienteDto findClienteById(Long id) {

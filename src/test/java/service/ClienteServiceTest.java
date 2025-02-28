@@ -5,6 +5,7 @@ import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentException;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 import com.agibank.test.teste_tecnico.service.ClienteService;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -26,6 +28,8 @@ public class ClienteServiceTest {
 
     @InjectMocks
     private ClienteService clienteService;
+
+
 
     Cliente savedCliente = new Cliente(
             1L,
@@ -41,7 +45,7 @@ public class ClienteServiceTest {
 
     @Test
     void createNewCliente_Success() {
-        // Dado (Given)
+
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Jar",
@@ -177,6 +181,30 @@ public class ClienteServiceTest {
         );
 
         assertEquals("O nome deve ter no mínimo 3 letras", exception.getMessage());
+    }
+
+    @Test
+    void findClientById_Sucess (){
+
+        when(clienteRepository.findById(any())).thenReturn(Optional.of(savedCliente));
+        var result = clienteService.findClienteById(1L);
+        assertNotNull(result);
+        assertEquals(savedCliente.getId(), result.id());
+        assertEquals(savedCliente.getNome(), result.nome());
+        assertEquals(savedCliente.getEndereco(), result.endereco());
+        assertEquals(savedCliente.getCpf(), result.cpf());
+        assertEquals(savedCliente.getEmail(), result.email());
+        assertEquals(savedCliente.getSaldo(), result.saldo());
+        assertEquals(savedCliente.getTelefone(), result.telefone());
+    }
+    @Test
+    void findClientById_EntityNotFound (){
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.empty());
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> clienteService.findClienteById(1L));
+        assertEquals("Cliente não encontrado.", exception.getMessage());
+        verify(clienteRepository, times(1)).findById(1L);
     }
 
 

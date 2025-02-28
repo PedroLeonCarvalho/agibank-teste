@@ -19,6 +19,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -82,8 +84,35 @@ public class ClienteControllerIntegrationTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
                 .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string("Cpf já cadastrado."));    }
+                .andExpect(content().string("Cpf já cadastrado."));
+    }
 
+    @Transactional
+    @Test
+    void findClienteById_sucess() throws Exception {
+        Cliente cliente = new Cliente(clienteDto);
+         clienteRepository.save(cliente);
+
+        // Buscando o cliente pelo ID
+        mockMvc.perform(get("/cliente/"+cliente.getId())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(cliente.getId()))
+                .andExpect(jsonPath("$.nome").value("Jar"))
+                .andExpect(jsonPath("$.cpf").value("781.197.887-98"));
+    }
+    @Transactional
+    @Test
+    void findClienteById_entityNotFound() throws Exception {
+
+
+        // Buscando o cliente pelo ID
+        mockMvc.perform(get("/cliente/"+99999999)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Cliente não encontrado."));
+
+    }
     }
 
 
