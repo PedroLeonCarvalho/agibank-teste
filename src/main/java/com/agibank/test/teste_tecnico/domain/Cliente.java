@@ -50,7 +50,7 @@ public class Cliente {
     private String endereco;
 
     @Column(nullable = false, precision = 18, scale = 2)
-    @DecimalMin(value = "0.00", inclusive = true, message = "Saldo não pode ser negativo")
+    @PositiveOrZero(message ="Saldo não pode ser negativo" )
     private BigDecimal saldo;
 
     public Cliente(ClienteDto dto) {

@@ -33,7 +33,7 @@ public record ClienteDto(
         @NotBlank(message = "Endereço é obrigatório")
         String endereco,
 
-//        @NotNull(message = "Saldo é obrigatório")
-        @DecimalMin(value = "0.00", inclusive = true, message = "Saldo não pode ser negativo")
+
+        @PositiveOrZero
         BigDecimal saldo
 ) {}
