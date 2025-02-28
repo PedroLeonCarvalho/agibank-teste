@@ -1,19 +1,19 @@
 package com.agibank.test.teste_tecnico.domain;
 
+import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "clientes")
-@Getter
 @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cliente {
@@ -52,4 +52,17 @@ public class Cliente {
     @Column(nullable = false, precision = 18, scale = 2)
     @DecimalMin(value = "0.00", inclusive = true, message = "Saldo não pode ser negativo")
     private BigDecimal saldo;
+
+    public Cliente(ClienteDto dto) {
+         this.id =dto.id();
+         this.nome = dto.nome();
+         this.cpf = dto.cpf();
+         this.email=dto.email();
+         this.dataNascimento=dto.dataNascimento();
+         this.telefone=dto.telefone();
+         this.endereco=dto.endereco();
+         this.saldo= (dto.saldo() != null) ? dto.saldo() : BigDecimal.ZERO;
+    }
+
+
 }
