@@ -20,10 +20,13 @@ public class ClienteController {
   }
     
         @PostMapping
-       //@Operation(summary = "Criar novo usuário", description = "Cria um novo usuário e retorna os dados cadastrados.")
-        public ResponseEntity<ClienteDto> createUser (@RequestBody @Valid ClienteDto cliente) {
-            var newCliente = clienteService.createService(cliente);
+        public ResponseEntity<ClienteDto> createCliente (@RequestBody @Valid ClienteDto cliente) {
+            var newCliente = clienteService.createNewCliente(cliente);
             return ResponseEntity.status(HttpStatus.CREATED).body(newCliente);
         }
+
+
+
+
 
 }

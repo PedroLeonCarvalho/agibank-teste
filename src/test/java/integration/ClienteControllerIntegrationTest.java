@@ -34,10 +34,10 @@ public class ClienteControllerIntegrationTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-@Autowired
+    @Autowired
     private ClienteService clienteService;
 
-@Autowired
+    @Autowired
     private ClienteRepository clienteRepository;
 
     private ClienteDto clienteDto;

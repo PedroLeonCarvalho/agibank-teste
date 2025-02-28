@@ -5,14 +5,11 @@ import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentException;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 import com.agibank.test.teste_tecnico.service.ClienteService;
-import org.junit.jupiter.api.AutoClose;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,7 +27,7 @@ public class ClienteServiceTest {
     @InjectMocks
     private ClienteService clienteService;
 
-    Cliente clienteSalvo = new Cliente(
+    Cliente savedCliente = new Cliente(
             1L,
             "Jar",
             "781.197.237-89",
@@ -38,11 +35,12 @@ public class ClienteServiceTest {
             LocalDate.of(2000, 5, 15),
             "22222222222",
             "Rua das Flores, 123 - São Paulo, SP",
-            BigDecimal.ZERO
+            BigDecimal.ZERO,
+            true
     );
 
     @Test
-    void createService_Success() {
+    void createNewCliente_Success() {
         // Dado (Given)
         ClienteDto clienteDto = new ClienteDto(
                 null,
@@ -56,26 +54,26 @@ public class ClienteServiceTest {
         );
 
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(false);
-        when(clienteRepository.save(any(Cliente.class))).thenReturn(clienteSalvo);
+        when(clienteRepository.save(any(Cliente.class))).thenReturn(savedCliente);
 
 
-        ClienteDto resultado = clienteService.createService(clienteDto);
+        ClienteDto dto = clienteService.createNewCliente(clienteDto);
 
 
-        assertNotNull(resultado);
-        assertEquals(1L, resultado.id());
-        assertEquals("Jar", resultado.nome());
-        assertEquals("781.197.237-89", resultado.cpf());
-        assertEquals("joasso.silv@aema.cil", resultado.email());
-        assertEquals(LocalDate.of(2000, 5, 15), resultado.dataNascimento());
-        assertEquals(BigDecimal.ZERO, resultado.saldo());
+        assertNotNull(dto);
+        assertEquals(1L, dto.id());
+        assertEquals("Jar", dto.nome());
+        assertEquals("781.197.237-89", dto.cpf());
+        assertEquals("joasso.silv@aema.cil", dto.email());
+        assertEquals(LocalDate.of(2000, 5, 15), dto.dataNascimento());
+        assertEquals(BigDecimal.ZERO, dto.saldo());
 
         verify(clienteRepository, times(1)).existsByCpf(clienteDto.cpf());
         verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
 
     @Test
-    void createServiceFail_InvalidCpf() {
+    void createNewClienteFail_InvalidCpf() {
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Jar",
@@ -89,14 +87,14 @@ public class ClienteServiceTest {
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
-                () -> clienteService.createService(clienteDto)
+                () -> clienteService.createNewCliente(clienteDto)
         );
 
         assertEquals("Formato inválido de CPF, use XXX.XXX.XXX-XX.", exception.getMessage());
     }
 
     @Test
-    void createServiceFail_cpfAlreadyExists() {
+    void createNewClienteFail_cpfAlreadyExists() {
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Jazz",
@@ -112,14 +110,14 @@ public class ClienteServiceTest {
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
-                () -> clienteService.createService(clienteDto)
+                () -> clienteService.createNewCliente(clienteDto)
         );
 
         assertEquals("Cpf já cadastrado.", exception.getMessage());
     }
 
     @Test
-    void createServiceFail_InvalidEmail() {
+    void createNewClienteFail_InvalidEmail() {
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Jar",
@@ -133,14 +131,14 @@ public class ClienteServiceTest {
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
-                () -> clienteService.createService(clienteDto)
+                () -> clienteService.createNewCliente(clienteDto)
         );
 
         assertEquals("Email em formato inválido.", exception.getMessage());
     }
 
     @Test
-    void createServiceFail_InvalidAge() {
+    void createNewClienteFail_InvalidAge() {
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Jar",
@@ -154,14 +152,14 @@ public class ClienteServiceTest {
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
-                () -> clienteService.createService(clienteDto)
+                () -> clienteService.createNewCliente(clienteDto)
         );
 
         assertEquals("A idade mínima para cadastro é de 18 anos.", exception.getMessage());
     }
 
     @Test
-    void createServiceFail_InvalidName() {
+    void createNewClienteFail_InvalidName() {
         ClienteDto clienteDto = new ClienteDto(
                 null,
                 "Ja",
@@ -175,7 +173,7 @@ public class ClienteServiceTest {
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
-                () -> clienteService.createService(clienteDto)
+                () -> clienteService.createNewCliente(clienteDto)
         );
 
         assertEquals("O nome deve ter no mínimo 3 letras", exception.getMessage());

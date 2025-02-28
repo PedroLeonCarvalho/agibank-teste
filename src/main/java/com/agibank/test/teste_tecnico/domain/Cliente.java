@@ -53,6 +53,9 @@ public class Cliente {
     @PositiveOrZero(message ="Saldo não pode ser negativo" )
     private BigDecimal saldo;
 
+    @Column(nullable = false)
+    private Boolean isActive = true;
+
     public Cliente(ClienteDto dto) {
          this.id =dto.id();
          this.nome = dto.nome();

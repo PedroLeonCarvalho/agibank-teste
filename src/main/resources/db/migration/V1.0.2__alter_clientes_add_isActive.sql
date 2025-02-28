@@ -1,0 +1,2 @@
+ALTER TABLE clientes
+ADD COLUMN is_ctive  BIT(1) DEFAULT 1 NOT NULL;
