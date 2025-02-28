@@ -105,6 +105,10 @@ public class ClienteService {
     }
 
     public void deleteCliente(@Valid Long id) {
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
+    cliente.setIsActive(false);
+    repository.save(cliente);
 
     }
 }
