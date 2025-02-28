@@ -19,11 +19,13 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest(classes = TesteTecnicoApplication.class)
@@ -113,6 +115,21 @@ public class ClienteControllerIntegrationTest {
                 .andExpect(content().string("Cliente não encontrado."));
 
     }
+
+    @Test
+    void deleteCliente_success_NoContent204() throws Exception {
+
+        Cliente cliente = clienteRepository.save(new Cliente(clienteDto));
+
+        mockMvc.perform(delete("/cliente/" + cliente.getId()))
+                .andExpect(status().isNoContent());
+
+        Optional<Cliente> clienteNotActive = clienteRepository.findById(cliente.getId());
+        assertTrue(clienteNotActive.isPresent());
+        assertFalse(clienteNotActive.get().getIsActive());
+    }
+
+
     }
 
 

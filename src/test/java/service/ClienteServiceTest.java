@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -216,6 +217,16 @@ public class ClienteServiceTest {
         assertEquals("Cliente não encontrado.", exception.getMessage());
         verify(clienteRepository, times(1)).findById(1L);
     }
+    @Test
+    void deleteCliente_sucess_NoContent204 (){
+
+        when(clienteRepository.findById(any())).thenReturn(Optional.of(savedCliente));
+        clienteService.deleteCliente(1L);
+        verify(clienteRepository, times(1)).save(any(Cliente.class));
+    }
+
+
+
 
 
 }
