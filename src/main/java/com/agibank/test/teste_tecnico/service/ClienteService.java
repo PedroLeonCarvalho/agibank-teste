@@ -28,7 +28,7 @@ public class ClienteService {
             throw new InvalidDataContentException("Cpf já cadastrado.");
         };
         if (!isValidCpf(dto.cpf())){
-            throw new InvalidDataContentException("Formato inválido de CPF, use apenas números.");
+            throw new InvalidDataContentException("Formato inválido de CPF, use XXX.XXX.XXX-XX.");
         }
         if(!isValidEmail(dto.email())){
             throw new InvalidDataContentException("Email em formato inválido.");
@@ -36,6 +36,10 @@ public class ClienteService {
         Long idade = ChronoUnit.YEARS.between(dto.dataNascimento(), LocalDate.now());
         if(idade < 18) {
             throw new InvalidDataContentException("A idade mínima para cadastro é de 18 anos.");
+        }
+
+        if(dto.nome().length() < 3) {
+            throw new InvalidDataContentException("O nome deve ter no mínimo 3 letras");
         }
 
         Cliente cliente = new Cliente(dto);
@@ -57,7 +61,7 @@ public class ClienteService {
     }
 
     private boolean isValidCpf (String cpf)  {
-        String cpfRegex = "\\d{11}";
+        String cpfRegex = "(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)";
         Pattern cpfPattern = Pattern.compile(cpfRegex);
 
         if (cpf == null) {

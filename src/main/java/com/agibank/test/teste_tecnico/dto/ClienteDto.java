@@ -16,7 +16,7 @@ public record ClienteDto(
 
 
         @NotBlank(message = "CPF é obrigatório")
-        @Pattern(regexp = "\\d{11}", message = "CPF deve conter 11 dígitos numéricos")
+        @Pattern(regexp = "(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)", message = "CPF deve ser no formato XXX.XXX.XXX-XX")
         String cpf,
 
         @NotBlank(message = "E-mail é obrigatório")
