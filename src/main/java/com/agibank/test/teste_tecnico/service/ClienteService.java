@@ -6,8 +6,12 @@ import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentExceptio
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import jakarta.persistence.EntityNotFoundException;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -88,4 +92,10 @@ public class ClienteService {
 
     }
 
+    public ClienteDto findClienteById(Long id) {
+
+      var cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));;
+        return convertToDto(cliente);
+
+    }
 }
