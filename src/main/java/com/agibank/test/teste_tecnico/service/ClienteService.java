@@ -11,6 +11,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
 
@@ -92,8 +93,18 @@ public class ClienteService {
 
     public ClienteDto findClienteById(Long id) {
 
+
       var cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));;
-        return convertToDto(cliente);
+
+        if(cliente.getIsActive() == false){
+            throw new EntityNotFoundException("Cliente não ativo.");
+        }
+      return convertToDto(cliente);
+
+
+    }
+
+    public void deleteCliente(@Valid Long id) {
 
     }
 }

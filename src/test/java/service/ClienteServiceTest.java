@@ -198,8 +198,18 @@ public class ClienteServiceTest {
         assertEquals(savedCliente.getTelefone(), result.telefone());
     }
     @Test
-    void findClientById_EntityNotFound (){
+    void findClientById_fail_isAtctiveFalse (){
+        savedCliente.setIsActive(false);
+        when(clienteRepository.findById(any())).thenReturn(Optional.of(savedCliente));
 
+        EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
+                () -> clienteService.findClienteById(1L));
+        assertEquals("Cliente não ativo.", exception.getMessage());
+
+    }
+
+    @Test
+    void findClientById_EntityNotFound (){
         when(clienteRepository.findById(1L)).thenReturn(Optional.empty());
         EntityNotFoundException exception = assertThrows(EntityNotFoundException.class,
                 () -> clienteService.findClienteById(1L));

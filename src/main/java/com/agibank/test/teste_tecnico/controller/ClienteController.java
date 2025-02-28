@@ -33,6 +33,15 @@ public class ClienteController {
 
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deactivateCliente (@PathVariable @Valid Long id) {
+
+    clienteService.deleteCliente(id);
+
+    return ResponseEntity.noContent().build();
+
+    }
+
 
 
 }
