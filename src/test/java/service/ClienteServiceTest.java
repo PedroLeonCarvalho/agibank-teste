@@ -225,6 +225,28 @@ public class ClienteServiceTest {
         verify(clienteRepository, times(1)).save(any(Cliente.class));
     }
 
+    @Test
+    void updateCliente_Sucess() {
+        ClienteDto clienteDto = new ClienteDto(
+                null,
+                "Jazz",
+                "781.197.237-00",
+                "joasso.silv@aema.cil",
+                LocalDate.of(2000, 5, 15),
+                "22222222222",
+                "Rua das Flores, 123 - São Paulo, SP",
+                null
+        );
+
+        Cliente cliente = new Cliente(clienteDto);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+
+        var updatedCliente = clienteService.updateCliente(1L, clienteDto);
+
+        assertNotNull(updatedCliente);
+        assertEquals(cliente.getNome(), updatedCliente.nome());
+    }
+
 
 
 
