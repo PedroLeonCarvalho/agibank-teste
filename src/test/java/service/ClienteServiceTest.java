@@ -43,20 +43,20 @@ public class ClienteServiceTest {
             BigDecimal.ZERO,
             true
     );
+    ClienteCreateDto clienteDto = new ClienteCreateDto(
 
+            "Jar",
+            "781.197.237-89",
+            "joasso.silv@aema.cil",
+            LocalDate.of(2000, 5, 15),
+            "22222222222",
+            "Rua das Flores, 123 - São Paulo, SP"
+
+    );
     @Test
     void createNewCliente_Success() {
 
-        ClienteCreateDto clienteDto = new ClienteCreateDto(
 
-                "Jar",
-                "781.197.237-89",
-                "joasso.silv@aema.cil",
-                LocalDate.of(2000, 5, 15),
-                "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP"
-
-        );
 
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(false);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(savedCliente);
@@ -99,16 +99,7 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_cpfAlreadyExists() {
-        ClienteCreateDto clienteDto = new ClienteCreateDto(
 
-                "Jazz",
-                "781.197.237-00",
-                "joasso.silv@aema.cil",
-                LocalDate.of(2000, 5, 15),
-                "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP"
-
-        );
 
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(true);
 
@@ -125,13 +116,14 @@ public class ClienteServiceTest {
         ClienteCreateDto clienteDto = new ClienteCreateDto(
 
                 "Jar",
-                "781.197.237-00",
-                "joasso.silv@aemacil",
+                "781.197.237-89",
+                "joasso.silv@aema",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
                 "Rua das Flores, 123 - São Paulo, SP"
 
         );
+
 
         InvalidDataContentException exception = assertThrows(
                 InvalidDataContentException.class,
@@ -146,7 +138,7 @@ public class ClienteServiceTest {
         ClienteCreateDto clienteDto = new ClienteCreateDto(
 
                 "Jar",
-                "781.197.237-00",
+                "781.197.237-89",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2020, 5, 15),
                 "22222222222",
@@ -166,8 +158,8 @@ public class ClienteServiceTest {
     void createNewClienteFail_InvalidName() {
         ClienteCreateDto clienteDto = new ClienteCreateDto(
 
-                "Ja",
-                "781.197.237-00",
+                "J",
+                "781.197.237-89",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
@@ -226,16 +218,7 @@ public class ClienteServiceTest {
 
     @Test
     void updateCliente_Sucess() {
-        ClienteCreateDto clienteDto = new ClienteCreateDto(
 
-                "Jazz",
-                "781.197.237-00",
-                "joasso.silv@aema.cil",
-                LocalDate.of(2000, 5, 15),
-                "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP"
-
-        );
 
         Cliente cliente = new Cliente(clienteDto);
         when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
@@ -253,16 +236,7 @@ public class ClienteServiceTest {
 
     @Test
     void updateCliente_Fail() {
-        ClienteCreateDto clienteDto = new ClienteCreateDto(
 
-                "Jazz",
-                "781.197.237-00",
-                "joasso.silv@aema.cil",
-                LocalDate.of(2000, 5, 15),
-                "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP"
-
-        );
         ClienteCreateDto clienteDtoDiferentData = new ClienteCreateDto(
 
                 "Jazzz",
