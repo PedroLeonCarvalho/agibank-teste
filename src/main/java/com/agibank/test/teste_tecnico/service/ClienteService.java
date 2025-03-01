@@ -111,4 +111,21 @@ public class ClienteService {
     repository.save(cliente);
 
     }
+
+    public ClienteDto updateCliente(Long id, ClienteDto clienteDto) {
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
+        if (cliente.getIsActive()==false){
+            throw new EntityNotFoundException("Cliente não está ativo.");
+        }
+
+        cliente.setNome(clienteDto.nome());
+        cliente.setCpf(clienteDto.cpf());
+        cliente.setEndereco(clienteDto.endereco());
+        cliente.setTelefone(clienteDto.telefone());
+        cliente.setDataNascimento(clienteDto.dataNascimento());
+
+        repository.save(cliente);
+        return convertToDto(cliente);
+    }
 }
