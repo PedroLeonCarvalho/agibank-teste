@@ -64,3 +64,6 @@ Após iniciar a aplicação, acesse a documentação do Swagger:
 http://localhost:8080/swagger-ui.html
 ```
 ### Agora seu ambiente está pronto! 🚀
+![2025-03-01_12-09](https://github.com/user-attachments/assets/d9484f0b-5daf-435c-b277-eb66ec0efd49)
+
+
