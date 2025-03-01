@@ -1,5 +1,6 @@
 package com.agibank.test.teste_tecnico.domain;
 
+import com.agibank.test.teste_tecnico.dto.ClienteCreateDto;
 import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -65,6 +66,16 @@ public class Cliente {
          this.telefone=dto.telefone();
          this.endereco=dto.endereco();
          this.saldo= (dto.saldo() != null) ? dto.saldo() : BigDecimal.ZERO;
+    }
+    public Cliente(ClienteCreateDto dto) {
+
+        this.nome = dto.nome();
+        this.cpf = dto.cpf();
+        this.email=dto.email();
+        this.dataNascimento=dto.dataNascimento();
+        this.telefone=dto.telefone();
+        this.endereco=dto.endereco();
+
     }
 
 

@@ -65,6 +65,7 @@ public class ClienteControllerIntegrationTest {
     @Test
     void createClienteSucess() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(clienteDto);
+
         mockMvc.perform(post("/cliente")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -80,8 +81,9 @@ public class ClienteControllerIntegrationTest {
     @Test
     void failToCreateCliente_cpfAlreadyExists() throws Exception {
         String jsonRequest = objectMapper.writeValueAsString(clienteDto);
+        Cliente cliente = new Cliente(clienteDto);
+        clienteRepository.save(cliente);
 
-        clienteRepository.save(new Cliente(clienteDto));
         mockMvc.perform(post("/cliente")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(jsonRequest))
@@ -92,6 +94,7 @@ public class ClienteControllerIntegrationTest {
     @Transactional
     @Test
     void findClienteById_sucess() throws Exception {
+
         Cliente cliente = new Cliente(clienteDto);
          clienteRepository.save(cliente);
 
@@ -117,6 +120,7 @@ public class ClienteControllerIntegrationTest {
     }
 
     @Test
+    @Transactional
     void deleteCliente_success_NoContent204() throws Exception {
 
         Cliente cliente = clienteRepository.save(new Cliente(clienteDto));

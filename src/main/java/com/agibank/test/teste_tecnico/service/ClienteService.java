@@ -1,11 +1,13 @@
 package com.agibank.test.teste_tecnico.service;
 
 import com.agibank.test.teste_tecnico.domain.Cliente;
+import com.agibank.test.teste_tecnico.dto.ClienteCreateDto;
 import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentException;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 
 
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,7 +29,7 @@ public class ClienteService {
         this.repository = repository;
     }
 
-    public ClienteDto createNewCliente(ClienteDto dto) {
+    public ClienteDto createNewCliente(ClienteCreateDto dto) {
 
         if(repository.existsByCpf(dto.cpf())){
             throw new InvalidDataContentException("Cpf já cadastrado.");
@@ -47,7 +49,12 @@ public class ClienteService {
             throw new InvalidDataContentException("O nome deve ter no mínimo 3 letras");
         }
 
+
         Cliente cliente = new Cliente(dto);
+        if(cliente.getSaldo() ==null) {
+            cliente.setSaldo(BigDecimal.ZERO);
+        };
+
         cliente = repository.save(cliente);
         return convertToDto(cliente);
 
@@ -55,12 +62,13 @@ public class ClienteService {
 
 
     private boolean isValidEmail (String email)  {
-        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
+        String emailRegex = "^[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
         Pattern emailPattern = Pattern.compile(emailRegex);
 
-        if (email == null) {
+        if (email == null || email.length() > 320) {
             return false;
         }
+
         Matcher matcher = emailPattern.matcher(email);
         return matcher.matches();
     }
@@ -112,7 +120,7 @@ public class ClienteService {
 
     }
 
-    public ClienteDto updateCliente(Long id, ClienteDto clienteDto) {
+    public ClienteDto updateCliente(Long id, ClienteCreateDto clienteDto) {
         Cliente cliente = repository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
         if (cliente.getIsActive()==false){

@@ -1,7 +1,7 @@
 package service;
 
 import com.agibank.test.teste_tecnico.domain.Cliente;
-import com.agibank.test.teste_tecnico.dto.ClienteDto;
+import com.agibank.test.teste_tecnico.dto.ClienteCreateDto;
 import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentException;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
 import com.agibank.test.teste_tecnico.service.ClienteService;
@@ -47,23 +47,22 @@ public class ClienteServiceTest {
     @Test
     void createNewCliente_Success() {
 
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jar",
                 "781.197.237-89",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(false);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(savedCliente);
 
 
-        ClienteDto dto = clienteService.createNewCliente(clienteDto);
-
+        var dto = clienteService.createNewCliente(clienteDto);
 
         assertNotNull(dto);
         assertEquals(1L, dto.id());
@@ -79,15 +78,15 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_InvalidCpf() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jar",
                 "781.197.237",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         InvalidDataContentException exception = assertThrows(
@@ -100,15 +99,15 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_cpfAlreadyExists() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jazz",
                 "781.197.237-00",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(true);
@@ -123,15 +122,15 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_InvalidEmail() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jar",
                 "781.197.237-00",
                 "joasso.silv@aemacil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         InvalidDataContentException exception = assertThrows(
@@ -144,15 +143,15 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_InvalidAge() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jar",
                 "781.197.237-00",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2020, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         InvalidDataContentException exception = assertThrows(
@@ -165,15 +164,15 @@ public class ClienteServiceTest {
 
     @Test
     void createNewClienteFail_InvalidName() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Ja",
                 "781.197.237-00",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         InvalidDataContentException exception = assertThrows(
@@ -227,15 +226,15 @@ public class ClienteServiceTest {
 
     @Test
     void updateCliente_Sucess() {
-        ClienteDto clienteDto = new ClienteDto(
-                null,
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
                 "Jazz",
                 "781.197.237-00",
                 "joasso.silv@aema.cil",
                 LocalDate.of(2000, 5, 15),
                 "22222222222",
-                "Rua das Flores, 123 - São Paulo, SP",
-                null
+                "Rua das Flores, 123 - São Paulo, SP"
+
         );
 
         Cliente cliente = new Cliente(clienteDto);
@@ -244,7 +243,49 @@ public class ClienteServiceTest {
         var updatedCliente = clienteService.updateCliente(1L, clienteDto);
 
         assertNotNull(updatedCliente);
-        assertEquals(cliente.getNome(), updatedCliente.nome());
+        assertEquals(clienteDto.nome(), updatedCliente.nome());
+        assertEquals(clienteDto.cpf(), updatedCliente.cpf());
+        assertEquals(clienteDto.email(), updatedCliente.email());
+        assertEquals(clienteDto.telefone(), updatedCliente.telefone());
+        assertEquals(clienteDto.endereco(), updatedCliente.endereco());
+
+    }
+
+    @Test
+    void updateCliente_Fail() {
+        ClienteCreateDto clienteDto = new ClienteCreateDto(
+
+                "Jazz",
+                "781.197.237-00",
+                "joasso.silv@aema.cil",
+                LocalDate.of(2000, 5, 15),
+                "22222222222",
+                "Rua das Flores, 123 - São Paulo, SP"
+
+        );
+        ClienteCreateDto clienteDtoDiferentData = new ClienteCreateDto(
+
+                "Jazzz",
+                "781.197.22-00",
+                "joasso.silv@aem.cil",
+                LocalDate.of(2000, 5, 15),
+                "22222422222",
+                "Rua das pedras, 123 - São Paulo, SP"
+
+        );
+
+        Cliente cliente = new Cliente(clienteDto);
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+
+        var updatedCliente = clienteService.updateCliente(1L, clienteDto);
+
+        assertNotNull(updatedCliente);
+        assertNotEquals(clienteDtoDiferentData.nome(), updatedCliente.nome());
+        assertNotEquals(clienteDtoDiferentData.cpf(), updatedCliente.cpf());
+        assertNotEquals(clienteDtoDiferentData.email(), updatedCliente.email());
+        assertNotEquals(clienteDtoDiferentData.telefone(), updatedCliente.telefone());
+        assertNotEquals(clienteDtoDiferentData.endereco(), updatedCliente.endereco());
+
     }
 
 
