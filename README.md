@@ -21,7 +21,7 @@ cd agibank-teste
 
 ### 1. Baixando a imagem do MySQL
 ```
-docker pull mysql:8.0
+docker pull mysql:latest
 ```
 ### 2. Iniciando o container do MySQL
 ```
