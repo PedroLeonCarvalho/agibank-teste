@@ -9,22 +9,16 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Optional;
-
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -61,6 +55,7 @@ public class ClienteControllerIntegrationTest {
                 null
         );
     }
+
     @Transactional
     @Test
     void createClienteSucess() throws Exception {
@@ -73,8 +68,6 @@ public class ClienteControllerIntegrationTest {
                     .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.nome").value("Jar"))
                 .andExpect(jsonPath("$.cpf").value("781.197.887-98"));
-
-
     }
 
     @Transactional
@@ -94,7 +87,6 @@ public class ClienteControllerIntegrationTest {
     @Transactional
     @Test
     void findClienteById_sucess() throws Exception {
-
         Cliente cliente = new Cliente(clienteDto);
          clienteRepository.save(cliente);
 
@@ -106,33 +98,26 @@ public class ClienteControllerIntegrationTest {
                 .andExpect(jsonPath("$.nome").value("Jar"))
                 .andExpect(jsonPath("$.cpf").value("781.197.887-98"));
     }
+
     @Transactional
     @Test
     void findClienteById_entityNotFound() throws Exception {
-
-
-        // Buscando o cliente pelo ID
         mockMvc.perform(get("/cliente/"+99999999)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Cliente não encontrado."));
-
     }
 
     @Test
     @Transactional
     void deleteCliente_success_NoContent204() throws Exception {
-
         Cliente cliente = clienteRepository.save(new Cliente(clienteDto));
-
         mockMvc.perform(delete("/cliente/" + cliente.getId()))
                 .andExpect(status().isNoContent());
-
         Optional<Cliente> clienteNotActive = clienteRepository.findById(cliente.getId());
         assertTrue(clienteNotActive.isPresent());
         assertFalse(clienteNotActive.get().getIsActive());
     }
-
 
     }
 

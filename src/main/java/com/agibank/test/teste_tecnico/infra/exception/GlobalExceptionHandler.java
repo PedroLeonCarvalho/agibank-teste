@@ -35,9 +35,7 @@ public class GlobalExceptionHandler {
         Map<String, String> response = new HashMap<>();
         response.put("erro:", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(response);
-    }
-
-    @ExceptionHandler(InvalidDataContentException.class)
+    }@ExceptionHandler(InvalidDataContentException.class)
     public ResponseEntity<String> handleUniqueCpfException (InvalidDataContentException ex){
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(ex.getMessage());
     }

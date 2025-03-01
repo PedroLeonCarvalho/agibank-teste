@@ -5,18 +5,12 @@ import com.agibank.test.teste_tecnico.dto.ClienteCreateDto;
 import com.agibank.test.teste_tecnico.dto.ClienteDto;
 import com.agibank.test.teste_tecnico.infra.exception.InvalidDataContentException;
 import com.agibank.test.teste_tecnico.repository.ClienteRepository;
-
-
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
-import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
@@ -60,7 +54,6 @@ public class ClienteService {
 
     }
 
-
     private boolean isValidEmail (String email)  {
         String emailRegex = "^[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
         Pattern emailPattern = Pattern.compile(emailRegex);
@@ -84,8 +77,6 @@ public class ClienteService {
         return matcher.matches();
     }
 
-
-
     public ClienteDto convertToDto (Cliente cliente) {
        return  new ClienteDto(
                 cliente.getId(),
@@ -100,16 +91,11 @@ public class ClienteService {
     }
 
     public ClienteDto findClienteById(Long id) {
-
-
       var cliente = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));;
-
         if(cliente.getIsActive() == false){
             throw new EntityNotFoundException("Cliente não ativo.");
         }
       return convertToDto(cliente);
-
-
     }
 
     public void deleteCliente(@Valid Long id) {
@@ -117,7 +103,6 @@ public class ClienteService {
                 .orElseThrow(() -> new EntityNotFoundException("Cliente não encontrado."));
     cliente.setIsActive(false);
     repository.save(cliente);
-
     }
 
     public ClienteDto updateCliente(Long id, ClienteCreateDto clienteDto) {
@@ -126,13 +111,11 @@ public class ClienteService {
         if (cliente.getIsActive()==false){
             throw new EntityNotFoundException("Cliente não está ativo.");
         }
-
         cliente.setNome(clienteDto.nome());
         cliente.setCpf(clienteDto.cpf());
         cliente.setEndereco(clienteDto.endereco());
         cliente.setTelefone(clienteDto.telefone());
         cliente.setDataNascimento(clienteDto.dataNascimento());
-
         repository.save(cliente);
         return convertToDto(cliente);
     }

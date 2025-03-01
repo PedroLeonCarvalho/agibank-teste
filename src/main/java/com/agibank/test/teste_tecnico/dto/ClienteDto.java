@@ -14,7 +14,6 @@ public record ClienteDto(
         @Size(min = 3, message = "O nome deve ter no mínimo 3 letras")
         String nome,
 
-
         @NotBlank(message = "CPF é obrigatório")
         @Pattern(regexp = "(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)", message = "CPF deve ser no formato XXX.XXX.XXX-XX")
         String cpf,
@@ -32,7 +31,6 @@ public record ClienteDto(
 
         @NotBlank(message = "Endereço é obrigatório")
         String endereco,
-
 
         @PositiveOrZero
         BigDecimal saldo
