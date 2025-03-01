@@ -1,4 +1,4 @@
-package com.agibank.test.teste_tecnico.infra;
+package com.agibank.test.teste_tecnico.infra.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

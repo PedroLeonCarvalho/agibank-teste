@@ -23,7 +23,7 @@ public class ClienteService {
         this.repository = repository;
     }
 
-    public ClienteDto createNewCliente(ClienteCreateDto dto) {
+    public ClienteDto createNewCliente(ClienteCreateDto dto) throws InvalidDataContentException {
 
         if(repository.existsByCpf(dto.cpf())){
             throw new InvalidDataContentException("Cpf já cadastrado.");

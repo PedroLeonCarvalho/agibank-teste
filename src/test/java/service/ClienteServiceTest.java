@@ -50,7 +50,7 @@ public class ClienteServiceTest {
     );
     
     @Test
-    void createNewCliente_Success() {
+    void createNewCliente_Success() throws InvalidDataContentException {
         when(clienteRepository.existsByCpf(clienteDto.cpf())).thenReturn(false);
         when(clienteRepository.save(any(Cliente.class))).thenReturn(savedCliente);
         var dto = clienteService.createNewCliente(clienteDto);
