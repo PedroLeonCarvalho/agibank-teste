@@ -26,12 +26,12 @@ public class ClienteController {
         this.clienteService = clienteService;
         this.clienteRepository = clienteRepository;
     }
-
     @Operation(summary = "Cria um novo cliente", description = "Recebe os dados do cliente e cadastra no sistema.")
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Cliente criado com sucesso"),
             @ApiResponse(responseCode = "400", description = "Dados de entrada inválidos")
     })
+
     @PostMapping
     public ResponseEntity<ClienteDto> createCliente(@RequestBody @Valid ClienteCreateDto cliente) throws InvalidDataContentException {
         var newCliente = clienteService.createNewCliente(cliente);
@@ -47,7 +47,6 @@ public class ClienteController {
     public ResponseEntity<ClienteDto> getClienteById(@PathVariable Long id) {
         var clienteDto = clienteService.findClienteById(id);
         return ResponseEntity.ok(clienteDto);
-
     }
 
     @Operation(summary = "Desativa um cliente", description = "Marca um cliente como inativo no sistema.")
@@ -59,13 +58,12 @@ public class ClienteController {
     public ResponseEntity deactivateCliente(@PathVariable @Valid Long id) {
         clienteService.deleteCliente(id);
         return ResponseEntity.noContent().build();
-
     }
 
     @Operation(summary = "Atualiza os dados de um cliente", description = "Modifica as informações de um cliente existente.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Cliente atualizado com sucesso"),
-            @ApiResponse(responseCode = "400", description = "Dados inválidos"),
+            @ApiResponse(responseCode = "422", description = "Dados inválidos"),
             @ApiResponse(responseCode = "404", description = "Cliente não encontrado")
     })
     @PutMapping("/{id}")
@@ -73,6 +71,4 @@ public class ClienteController {
         ClienteDto updatedCliente = clienteService.updateCliente(id, clienteDto);
         return ResponseEntity.ok(updatedCliente);
     }
-
-
 }

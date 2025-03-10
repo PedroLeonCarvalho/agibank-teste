@@ -10,6 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.Valid;
+import lombok.val;
 import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -24,17 +25,16 @@ public class ClienteService {
     }
 
     public ClienteDto createNewCliente(ClienteCreateDto dto) throws InvalidDataContentException {
-
         if(repository.existsByCpf(dto.cpf())){
             throw new InvalidDataContentException("Cpf já cadastrado.");
-        };
+        }
         if (!isValidCpf(dto.cpf())){
             throw new InvalidDataContentException("Formato inválido de CPF, use XXX.XXX.XXX-XX.");
         }
         if(!isValidEmail(dto.email())){
             throw new InvalidDataContentException("Email em formato inválido.");
-        };
-        Long idade = ChronoUnit.YEARS.between(dto.dataNascimento(), LocalDate.now());
+        }
+        val idade = ChronoUnit.YEARS.between(dto.dataNascimento(), LocalDate.now());
         if(idade < 18) {
             throw new InvalidDataContentException("A idade mínima para cadastro é de 18 anos.");
         }
@@ -44,10 +44,10 @@ public class ClienteService {
         }
 
 
-        Cliente cliente = new Cliente(dto);
+        var cliente = new Cliente(dto);
         if(cliente.getSaldo() ==null) {
             cliente.setSaldo(BigDecimal.ZERO);
-        };
+        }
 
         cliente = repository.save(cliente);
         return convertToDto(cliente);

@@ -23,7 +23,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     @NotBlank(message = "Nome é obrigatório")
     @Size(min = 3, message = "O nome deve ter no mínimo 3 letras")
     private String nome;
@@ -33,7 +33,7 @@ public class Cliente {
     @Pattern(regexp = "(^\\d{3}\\x2E\\d{3}\\x2E\\d{3}\\x2D\\d{2}$)", message = "CPF deve ser no formato XXX.XXX.XXX-XX")
     private String cpf;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     @NotBlank(message = "E-mail é obrigatório")
     @Email(message = "E-mail deve ser válido no formato email@email.com")
     private String email;
@@ -46,7 +46,7 @@ public class Cliente {
     @Pattern(regexp = "\\d{11,13}", message = "Telefone deve ter entre 11 e 13 dígitos numéricos")
     private String telefone;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false)
     @NotBlank(message = "Endereço é obrigatório")
     private String endereco;
 
@@ -58,24 +58,22 @@ public class Cliente {
     private Boolean isActive = true;
 
     public Cliente(ClienteDto dto) {
-         this.id =dto.id();
-         this.nome = dto.nome();
-         this.cpf = dto.cpf();
-         this.email=dto.email();
-         this.dataNascimento=dto.dataNascimento();
-         this.telefone=dto.telefone();
-         this.endereco=dto.endereco();
-         this.saldo= (dto.saldo() != null) ? dto.saldo() : BigDecimal.ZERO;
-    }
-    public Cliente(ClienteCreateDto dto) {
-
+        this.id =dto.id();
         this.nome = dto.nome();
         this.cpf = dto.cpf();
         this.email=dto.email();
         this.dataNascimento=dto.dataNascimento();
         this.telefone=dto.telefone();
         this.endereco=dto.endereco();
-
+        this.saldo= (dto.saldo() != null) ? dto.saldo() : BigDecimal.ZERO;
+    }
+    public Cliente(ClienteCreateDto dto) {
+        this.nome = dto.nome();
+        this.cpf = dto.cpf();
+        this.email=dto.email();
+        this.dataNascimento=dto.dataNascimento();
+        this.telefone=dto.telefone();
+        this.endereco=dto.endereco();
     }
 
 

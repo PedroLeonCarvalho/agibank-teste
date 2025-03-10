@@ -111,10 +111,10 @@ public class ClienteControllerIntegrationTest {
     @Test
     @Transactional
     void deleteCliente_success_NoContent204() throws Exception {
-        Cliente cliente = clienteRepository.save(new Cliente(clienteDto));
+        var cliente = clienteRepository.save(new Cliente(clienteDto));
         mockMvc.perform(delete("/cliente/" + cliente.getId()))
                 .andExpect(status().isNoContent());
-        Optional<Cliente> clienteNotActive = clienteRepository.findById(cliente.getId());
+        var clienteNotActive = clienteRepository.findById(cliente.getId());
         assertTrue(clienteNotActive.isPresent());
         assertFalse(clienteNotActive.get().getIsActive());
     }

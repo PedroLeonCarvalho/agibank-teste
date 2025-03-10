@@ -1,7 +1,6 @@
 package com.agibank.test.teste_tecnico.dto;
 
 import jakarta.validation.constraints.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
